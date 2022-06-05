@@ -6,20 +6,23 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
+import javax.mail.MessagingException;
+
 @SpringBootApplication
 public class SpringEmailDemoApplication {
 	@Autowired
-	private EmailSenderService senderService;
+	EmailSenderService senderService;
+	EmailContent content = new EmailContent();
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringEmailDemoApplication.class, args);
 	}
 
 	@EventListener(ApplicationReadyEvent.class)
-	public void sendMail()
-	{
+	public void sendMail() throws MessagingException {
+
 		senderService.sendMail("michal.jemiolek@gmail.com","Email from java bank system",
-				"Hello user.\nWe are sorry but you don't have creditworthiness to take a loan in our bank");
+				content.getDebtMessage("Janusz", -500));
 	}
 
 }
